@@ -1,25 +1,29 @@
-import requests
+from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup
 
 URL = "https://emasantam.id/harga-emas-antam-harian/"
 
-HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-    "Accept-Language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7",
-    "Connection": "keep-alive",
-    "Referer": "https://www.google.com/",
-}
 
 def extract():
 
-    response = requests.get(URL, headers=HEADERS, timeout=30)
+    with sync_playwright() as p:
 
-    print("STATUS :", response.status_code)
-    print("URL    :", response.url)
-    print("BODY   :")
-    print(response.text[:500])
+        browser = p.chromium.launch(
+            headless=True
+        )
 
-    response.raise_for_status()
+        page = browser.new_page(
+            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+        )
 
-    return BeautifulSoup(response.text, "html.parser")
+        page.goto(
+            URL,
+            wait_until="networkidle",
+            timeout=60000
+        )
+
+        html = page.content()
+
+        browser.close()
+
+    return BeautifulSoup(html, "html.parser")
