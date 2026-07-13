@@ -25,5 +25,13 @@ def extract():
         html = page.content()
 
         browser.close()
+        
+        html = page.content()
+        
+        print("--- INTIP ISI HTML ---")
+        print(html[:2000])
+        print("----------------------")
+
+        browser.close()
 
     return BeautifulSoup(html, "html.parser")
