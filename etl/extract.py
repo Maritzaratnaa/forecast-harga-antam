@@ -21,10 +21,6 @@ def extract():
             wait_until="networkidle",
             timeout=60000
         )
-
-        html = page.content()
-
-        browser.close()
         
         html = page.content()
         
