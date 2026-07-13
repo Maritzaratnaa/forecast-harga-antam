@@ -5,26 +5,24 @@ from load import load
 
 from config.logger import logger
 
-
 def main():
 
-    logger.info("Extract")
+    try:
 
-    soup = extract()
+        logger.info("Pipeline started")
 
-    logger.info("Transform")
+        soup = extract()
 
-    df = transform(soup)
+        df = transform(soup)
 
-    df = validate(df)
+        df = validate(df)
 
-    logger.info(f"{len(df)} records")
+        load(df)
 
-    load(df)
+        logger.info("Pipeline success")
 
-    logger.info("Pipeline selesai")
+    except Exception as e:
 
+        logger.exception(e)
 
-if __name__ == "__main__":
-
-    main()
+        raise

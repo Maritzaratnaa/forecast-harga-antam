@@ -1,7 +1,15 @@
-requests
 beautifulsoup4
-pandas
+requests
 lxml
+pandas
+
 python-dotenv
+
 sqlalchemy
 psycopg2-binary
+
+streamlit
+
+plotly
+
+prophet
