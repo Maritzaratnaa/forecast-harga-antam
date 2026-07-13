@@ -7,12 +7,12 @@ load_dotenv()
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
+if not DATABASE_URL:
+    raise ValueError("DATABASE_URL tidak ditemukan.")
+
 engine = create_engine(
-
     DATABASE_URL,
-
     pool_pre_ping=True,
-
-    echo=False
-
+    pool_recycle=300,
+    echo=False,
 )

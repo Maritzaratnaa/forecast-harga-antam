@@ -33,4 +33,4 @@ jobs:
 
     - name: Run Pipeline
       run: |
-        python -m etl.pipeline.py
+        python -m etl.pipeline

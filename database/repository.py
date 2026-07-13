@@ -1,56 +1,54 @@
-from sqlalchemy.dialects.postgresql import insert
+import pandas as pd
 
 from sqlalchemy.orm import Session
+from sqlalchemy.dialects.postgresql import insert
 
 from database.connection import engine
 from database.models import GoldPrice
-from database.models import Base
-
-Base.metadata.create_all(engine)
 
 
 def save_dataframe(df):
 
     with Session(engine) as session:
 
-        for _, row in df.iterrows():
+        try:
 
-            stmt = insert(GoldPrice).values(
+            for _, row in df.iterrows():
 
-                tanggal=row["tanggal"],
+                stok = None if pd.isna(row["stok"]) else str(row["stok"])
 
-                scraped_at=row["scraped_at"],
+                stmt = insert(GoldPrice).values(
 
-                source=row["source"],
+                    tanggal=row["tanggal"],
+                    scraped_at=row["scraped_at"],
+                    source=row["source"],
+                    wilayah=row["wilayah"],
+                    butik=row["butik"],
+                    gram=row["gram"],
+                    harga=row["harga"],
+                    stok=stok
 
-                wilayah=row["wilayah"],
+                )
 
-                butik=row["butik"],
+                stmt = stmt.on_conflict_do_update(
 
-                gram=row["gram"],
+                    constraint="uq_gold",
 
-                harga=row["harga"],
+                    set_={
 
-                stok=str(row["stok"])
+                        "harga": row["harga"],
+                        "stok": stok,
+                        "scraped_at": row["scraped_at"]
 
-            )
+                    }
 
-            stmt = stmt.on_conflict_do_update(
+                )
 
-                constraint="uq_gold",
+                session.execute(stmt)
 
-                set_={
+            session.commit()
 
-                    "harga": row["harga"],
+        except Exception:
 
-                    "stok": str(row["stok"]),
-
-                    "scraped_at": row["scraped_at"]
-
-                }
-
-            )
-
-            session.execute(stmt)
-
-        session.commit()
+            session.rollback()
+            raise

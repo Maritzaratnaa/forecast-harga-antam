@@ -1,3 +1,5 @@
+from datetime import date, datetime
+
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
@@ -16,13 +18,13 @@ class Base(DeclarativeBase):
 
 class GoldPrice(Base):
 
-    __tablename__ = "gold_prices"
+    __tablename__ = "harga_antam_harian"
 
     id: Mapped[int] = mapped_column(primary_key=True)
 
-    tanggal: Mapped[Date]
+    tanggal: Mapped[date] = mapped_column(Date)
 
-    scraped_at: Mapped[DateTime]
+    scraped_at: Mapped[datetime] = mapped_column(DateTime)
 
     source: Mapped[str] = mapped_column(String(255))
 
@@ -37,19 +39,11 @@ class GoldPrice(Base):
     stok: Mapped[str] = mapped_column(String(30))
 
     __table_args__ = (
-
         UniqueConstraint(
-
             "tanggal",
-
             "wilayah",
-
             "butik",
-
             "gram",
-
-            name="uq_gold"
-
+            name="uq_gold",
         ),
-
     )
