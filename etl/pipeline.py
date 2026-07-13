@@ -4,7 +4,7 @@ from etl.load import load
 from etl.validation import validate
 
 def main():
-        
+    
     print("START SCRAPING")
 
     soup = extract()

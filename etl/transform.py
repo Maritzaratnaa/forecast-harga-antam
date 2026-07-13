@@ -31,58 +31,65 @@ def clean_stock(text):
 
 
 def transform(soup):
-
     tables = soup.find_all("table")
-
     data = []
-
     today = datetime.now().date()
-
     scraped_at = datetime.now()
 
+    if not tables:
+        print("Tidak ditemukan tabel di HTML.")
+        return pd.DataFrame()
+
     for table in tables:
+        all_rows = table.find_all("tr")
+        
+        if len(all_rows) < 4: 
+            continue
 
-        headers = table.find_all("tr")
-
-        wilayah = headers[1].get_text(" ", strip=True)
+        wilayah = all_rows[1].get_text(" ", strip=True)
 
         butik_list = [
             th.get_text(" ", strip=True)
-            for th in headers[3].find_all("th")
+            for th in all_rows[3].find_all("th")
         ]
+        
+        data_rows = all_rows[4:]
 
-        rows = table.find("tbody").find_all("tr")
-
-        for row in rows:
-
+        for row in data_rows:
             cols = row.find_all("td")
+            
+            if not cols:
+                continue
 
-            gram = float(cols[0].text.strip())
+            try:
+                gram_text = re.sub(r"[^\d\.]", "", cols[0].text.strip())
+                gram = float(gram_text) if gram_text else None
+                
+                if gram is None:
+                    continue
 
-            for butik, cell in zip(butik_list, cols[1:]):
+                for i, butik in enumerate(butik_list):
+                    if (i + 1) < len(cols):
+                        cell = cols[i + 1]
+                        text = cell.get_text(" ", strip=True)
 
-                text = cell.get_text(" ", strip=True)
-
-                data.append({
-
-                    "tanggal": today,
-
-                    "scraped_at": scraped_at,
-
-                    "source": SOURCE,
-
-                    "wilayah": wilayah,
-
-                    "butik": butik,
-
-                    "gram": gram,
-
-                    "harga": clean_price(text),
-
-                    "stok": clean_stock(text)
-
-                })
+                        data.append({
+                            "tanggal": today,
+                            "scraped_at": scraped_at,
+                            "source": SOURCE,
+                            "wilayah": wilayah,
+                            "butik": butik,
+                            "gram": gram,
+                            "harga": clean_price(text),
+                            "stok": clean_stock(text)
+                        })
+            except Exception as e:
+                print(f"Gagal memproses baris: {e}")
+                continue
 
     df = pd.DataFrame(data)
-
+    
+    if df.empty:
+        df = pd.DataFrame(columns=["tanggal", "scraped_at", "source", "wilayah", "butik", "gram", "harga", "stok"])
+        
     return df
