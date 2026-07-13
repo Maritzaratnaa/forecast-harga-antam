@@ -1,33 +1,34 @@
-from playwright.sync_api import sync_playwright
+import os
+import requests
 from bs4 import BeautifulSoup
 
 URL = "https://emasantam.id/harga-emas-antam-harian/"
 
-
 def extract():
+    api_key = os.getenv("SCRAPERAPI_KEY")
+    
+    if not api_key:
+        print("Peringatan: SCRAPERAPI_KEY tidak ditemukan!")
+        return BeautifulSoup("", "html.parser")
 
-    with sync_playwright() as p:
-
-        browser = p.chromium.launch(
-            headless=True
-        )
-
-        page = browser.new_page(
-            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
-        )
-
-        page.goto(
-            URL,
-            wait_until="networkidle",
-            timeout=60000
-        )
+    payload = {
+        'api_key': api_key,
+        'url': URL,
+        'render': 'true'
+    }
+    
+    try:
+        print("Mengirim request ke ScraperAPI...")
+        response = requests.get('https://api.scraperapi.com/', params=payload, timeout=60)
         
-        html = page.content()
+        if response.status_code == 200:
+            print("Scraping via ScraperAPI Sukses!")
+            return BeautifulSoup(response.text, "html.parser")
+        else:
+            print(f"ScraperAPI gagal. Status Code: {response.status_code}")
+            print("Error:", response.text[:500])
+            
+    except Exception as e:
+        print(f"Terjadi error saat request ke ScraperAPI: {e}")
         
-        print("--- INTIP ISI HTML ---")
-        print(html[:2000])
-        print("----------------------")
-
-        browser.close()
-
-    return BeautifulSoup(html, "html.parser")
+    return BeautifulSoup("", "html.parser")
