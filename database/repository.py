@@ -43,6 +43,8 @@ def save_dataframe(df):
                     }
 
                 )
+                
+                print("INSERT:", row["tanggal"], row["gram"])
 
                 session.execute(stmt)
 

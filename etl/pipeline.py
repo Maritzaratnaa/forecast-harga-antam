@@ -3,26 +3,21 @@ from etl.transform import transform
 from etl.load import load
 from etl.validation import validate
 
-from config.logger import logger
-
 def main():
+        
+    print("START SCRAPING")
 
-    try:
+    soup = extract()
+        
+    print("SCRAPING SUCCESS")
 
-        logger.info("Pipeline started")
+    df = transform(soup)
 
-        soup = extract()
+    df = validate(df)
+        
+    print(df.head())
+    print("TOTAL DATA:", len(df))
 
-        df = transform(soup)
+    load(df)
 
-        df = validate(df)
-
-        load(df)
-
-        logger.info("Pipeline success")
-
-    except Exception as e:
-
-        logger.exception(e)
-
-        raise
+    print("LOAD SUCCESS")
