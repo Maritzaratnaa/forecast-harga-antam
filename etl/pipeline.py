@@ -21,3 +21,6 @@ def main():
     load(df)
 
     print("LOAD SUCCESS")
+    
+if __name__ == "__main__":
+    main()
