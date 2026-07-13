@@ -1,7 +1,7 @@
-from extract import extract
-from transform import transform
-from validation import validate
-from load import load
+from etl.extract import extract
+from etl.transform import transform
+from etl.load import load
+from etl.validation import validate
 
 from config.logger import logger
 
