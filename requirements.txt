@@ -5,3 +5,8 @@ lxml
 python-dotenv
 sqlalchemy
 psycopg2-binary
+prophet
+matplotlib
+scikit-learn
+streamlit
+plotly
