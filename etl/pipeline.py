@@ -6,7 +6,8 @@ from etl.load import load
 from etl.validation import validate
 from forecast.predict import generate_forecast_all_grams
 
-from database.connection import SessionLocal
+from database.connection import engine
+from sqlalchemy.orm import sessionmaker
 
 def main():
     soup = extract()
@@ -26,7 +27,8 @@ def main():
 
     df = validate(df)
 
-    session = SessionLocal() 
+    Session = sessionmaker(bind=engine)
+    session = Session()
     try:
         load(df, session)
         print("LOAD DATA HARIAN SUCCESS")
