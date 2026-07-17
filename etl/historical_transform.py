@@ -73,10 +73,7 @@ def transform_history(soup, tanggal):
 
                 "gram": gram,
 
-                "harga_antam": harga_antam,
-
-                "source": "harga-emas.org"
-
+                "harga_antam": harga_antam
             })
 
 

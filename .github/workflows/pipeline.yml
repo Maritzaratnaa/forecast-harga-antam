@@ -2,7 +2,7 @@ name: Forecast Antam Pipeline
 
 on:
   schedule:
-    - cron: '0 16 * * *'
+    - cron: '0 12 * * *'
   workflow_dispatch:
 
 jobs:

@@ -30,22 +30,19 @@ def load_history(df):
     (
         tanggal,
         gram,
-        harga_antam,
-        source
+        harga_antam
     )
     VALUES
     (
         :tanggal,
         :gram,
-        :harga_antam,
-        :source
+        :harga_antam
     )
     ON CONFLICT (tanggal, gram)
     DO UPDATE SET
 
-        harga_antam = EXCLUDED.harga_antam,
+        harga_antam = EXCLUDED.harga_antam
 
-        source = EXCLUDED.source;
     """
 
 

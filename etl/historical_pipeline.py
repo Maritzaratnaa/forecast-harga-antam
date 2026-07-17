@@ -8,9 +8,8 @@ from datetime import date
 
 tanggal_list = pd.date_range(
 
-    start=date(2025,11,11),
-
-    end=date.today()
+    start="2026-07-11",
+    end="2026-07-11"
 
 )
 
@@ -39,3 +38,4 @@ for tanggal in tanggal_list:
     if len(df):
 
         load_history(df)
+        print("Scrape selesai")
