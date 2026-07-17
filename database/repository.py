@@ -3,6 +3,7 @@ from sqlalchemy import text
 from datetime import datetime
 
 def save_dataframe(df, session):
+    df = df[df["gram"] != 3.0].copy()
     tanggal_hari_ini = str(df["tanggal"].iloc[0])
     
     query_stok = text("""
