@@ -6,6 +6,8 @@ from etl.load import load
 from etl.validation import validate
 from forecast.predict import generate_forecast_all_grams
 
+from database.connection import SessionLocal
+
 def main():
     soup = extract()
     
@@ -24,8 +26,15 @@ def main():
 
     df = validate(df)
 
-    load(df)
-    print("LOAD DATA HARIAN SUCCESS")
+    session = SessionLocal() 
+    try:
+        load(df, session)
+        print("LOAD DATA HARIAN SUCCESS")
+    except Exception as e:
+        print(f"LOAD DATA HARIAN GAGAL: {e}")
+        return
+    finally:
+        session.close()
     
     try:
         generate_forecast_all_grams()
