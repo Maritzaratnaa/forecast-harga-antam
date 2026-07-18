@@ -37,8 +37,6 @@ Link Dashboard: https://prediksi-harga-antam.streamlit.app/
 │   └── workflows/
 │       └── pipeline.yml
 ├── dashboard/
-│   ├── .streamlit/
-│   ├    └── secrets.toml
 │   └── app.py
 ├── database/
 │   ├── connection.py
