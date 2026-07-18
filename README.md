@@ -36,12 +36,27 @@ Link Dashboard: https://prediksi-harga-antam.streamlit.app/
 ├── .github/
 │   └── workflows/
 │       └── pipeline.yml
+├── dashboard/
+│   ├── .streamlit/
+│   ├    └── secrets.toml
+│   └── app.py
+├── database/
+│   ├── connection.py
+│   ├── models.py
+│   └── repository.py
+├── etl/
+│   ├── historical_extract.py
+│   ├── historical_transform.py
+│   ├── historical_load.py
+│   ├── historical_pipeline.py
+│   ├── extract.py
+│   ├── transform.py
+│   ├── load.py
+│   └── validation.py
 ├── forecast/
 │   ├── predict.py
-│   └── evaluate.py
-├── scraper/
-│   └── main.py
-├── app.py
+│   └── train.py
+├── .gitignore
 ├── requirements.txt
 └── README.md
 ```
